@@ -1,11 +1,20 @@
-from django.shortcuts import render
 from rest_framework import viewsets
 from .models import Todo
 from .serializers import TodoSerializer
 
 class TodoViewSet(viewsets.ModelViewSet):
-    queryset = Todo.objects.all()
     serializer_class = TodoSerializer
 
-
+    def get_queryset(self):
+        queryset = Todo.objects.all()
+        
+        # We explicitly define the variable 'status' right here
+        status = self.request.query_params.get('status')
+        
+        if status == 'completed':
+            queryset = queryset.filter(is_completed=True)
+        elif status == 'pending':
+            queryset = queryset.filter(is_completed=False)
+            
+        return queryset
 # Create your views here.
