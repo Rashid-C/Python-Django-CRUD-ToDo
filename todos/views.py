@@ -6,7 +6,7 @@ class TodoViewSet(viewsets.ModelViewSet):
     serializer_class = TodoSerializer
 
     def get_queryset(self):
-        queryset = Todo.objects.all()
+        queryset = Todo.objects.filter(owner=self.request.user)
         
        
         status = self.request.query_params.get('status')
