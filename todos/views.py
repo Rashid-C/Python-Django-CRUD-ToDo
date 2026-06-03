@@ -8,7 +8,7 @@ class TodoViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = Todo.objects.all()
         
-        # We explicitly define the variable 'status' right here
+       
         status = self.request.query_params.get('status')
         
         if status == 'completed':
@@ -17,4 +17,7 @@ class TodoViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(is_completed=False)
             
         return queryset
+    
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 # Create your views here.
